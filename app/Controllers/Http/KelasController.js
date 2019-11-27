@@ -5,6 +5,10 @@
 /** @typedef {import('@adonisjs/framework/src/View')} View */
 
 const Kelas = use('App/Models/Kelas')
+const Mapel = use('App/Models/MataPelajaran')
+const Guru = use('App/Models/Guru')
+const GuruMapel = use('App/Models/GuruMapel')
+
 const { validate } = use('Validator')
 const { generateCode } = use('App/Helpers/GenerateCode')
 
@@ -144,6 +148,39 @@ class KelasController {
       return response.json({
         error: false,
         message: 'Kelas tidak ditemukan!'
+      })
+    }
+  }
+
+  async setMataPelajaran ({ request, response, params }) {
+    const validation = await validate(request.all(), {
+      kode_guru: 'required|exists:guru,kode',
+      kode_mapel: 'required|exists:mata_pelajaran,kode'
+    })
+
+    if(validation.fails()) {
+      return response.json({
+        error: true,
+        message: validation.messages()
+      })
+    }
+
+    const kelas = await Kelas.findBy('kode', params.kode)
+    if(kelas !== null) {
+      const guru_mapel = new GuruMapel()
+      guru_mapel.kode_guru = request.input('kode_guru')
+      guru_mapel.kode_mapel = request.input('kode_mapel')
+      guru_mapel.kode_kelas = kelas.kode
+      await guru_mapel.save()
+
+      return response.json({
+        error: false,
+        data: guru_mapel
+      })
+    } else {
+      return response.json({
+        error: true,
+        message: 'Kelas tidak ditemukan'
       })
     }
   }

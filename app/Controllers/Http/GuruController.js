@@ -29,6 +29,23 @@ class GuruController {
     })
   }
 
+  async getWithMataPelajaran ({ request, response, params }) {
+    if(params.kode !== null) {
+      const guru = await Guru.query().where('kode', params.kode)
+        .with('mata_pelajaran').fetch()
+      response.json({
+        error: false,
+        data: guru
+      })
+    } else {
+      const guru = await Guru.query().with('mata_pelajaran').fetch()
+      response.json({
+        error: false,
+        data: guru
+      })
+    }
+  }
+
   /**
    * Create/save a new guru.
    * POST gurus

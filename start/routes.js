@@ -32,6 +32,7 @@ Route.group(() => {
   Route.get('/kelas/:kode', 'KelasController.show').as('kelas.show')
   Route.put('/kelas/:kode', 'KelasController.update').as('kelas.update')
   Route.delete('/kelas/:kode', 'KelasController.destroy').as('kelas.destroy')
+  Route.post('/kelas/:kode/set-mapel', 'KelasController.setMataPelajaran').as('kelas.set-mapel')
 
   //Mata Pelajaran
   Route.get('/mata-pelajaran', 'MataPelajaranController.index').as('mapel.index')
@@ -43,6 +44,7 @@ Route.group(() => {
   //Guru
   Route.get('/guru', 'GuruController.index').as('guru.index')
   Route.post('/guru', 'GuruController.store').as('guru.store')
+  Route.get('/guru/with-mapel/:kode?', 'GuruController.getWithMataPelajaran').as('guru.with-mapel')
   Route.get('/guru/:kode', 'GuruController.show').as('guru.show')
   Route.put('/guru/:kode', 'GuruController.update').as('guru.update')
   Route.delete('/guru/:kode', 'GuruController.destroy').as('guru.destroy')
